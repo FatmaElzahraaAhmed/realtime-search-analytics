@@ -1,0 +1,33 @@
+<div class="analytics-container">
+<div class="header">
+    <a href="/" class="back-button">⬅️ Back to Search</a>
+  <h1>🔍 Search Analytics Dashboard</h1>
+    <a href="/search_queries/analytics" class="refresh-button">🔄 Refresh</a>
+</div>
+
+
+  <div class="section trends-section">
+    <h2>📈 Trending Searches</h2>
+    <ul class="trends-list">
+      <% @trends.sort_by { |_, count| -count }.each do |term, count| %>
+        <li><strong><%= term %></strong> — <span class="count"><%= count %></span></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="section users-section">
+    <h2>👥 Per User Searches</h2>
+    <% @per_user.each_with_index do |(_, terms), index| %>
+      <div class="user-card">
+        <h3>Random User <%= index + 1 %></h3>
+        <ul>
+          <% terms.each do |term, count| %>
+            <li><%= term %> — <span class="count"><%= count %></span></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= stylesheet_link_tag "analytics", media: "all" %>
