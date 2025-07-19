@@ -16,8 +16,7 @@ default: &default
   adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  socket: /tmp/.s.PGSQL.5432
+  pool: 5
 
 development:
   <<: *default
