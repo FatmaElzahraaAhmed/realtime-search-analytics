@@ -15,15 +15,14 @@ namespace :redis_to_db do
         count = count_str.to_i
         next if term.blank? || count <= 0
 
-        # Handle pyramid cleanup
         last_in_db = SearchQuery.where(ip_address: ip).order(created_at: :desc).first
         if last_in_db.present? && term.start_with?(last_in_db.term) && term != last_in_db.term
           if last_in_db.search_count <= 1
             last_in_db.destroy
-            puts "🗑️ Deleted pyramid term '#{last_in_db.term}' for #{ip} (count was 1)"
+            puts "Deleted pyramid term '#{last_in_db.term}' for #{ip} (count was 1)"
           else
             last_in_db.decrement!(:search_count)
-            puts "➖ Decremented pyramid term '#{last_in_db.term}' for #{ip} (now #{last_in_db.search_count})"
+            puts "Decremented pyramid term '#{last_in_db.term}' for #{ip} (now #{last_in_db.search_count})"
           end
 
           redis.hdel(user_key, last_in_db.term.downcase.strip)
@@ -33,20 +32,20 @@ namespace :redis_to_db do
 
         if existing
           existing.increment!(:search_count, count)
-          puts "🔁 Updated '#{term}' for #{ip} in DB with +#{count}"
+          puts "Updated '#{term}' for #{ip} in DB with +#{count}"
         else
           SearchQuery.create!(
             term: term,
             ip_address: ip,
             search_count: count
           )
-          puts "✅ Inserted '#{term}' for #{ip} in DB with count #{count}"
+          puts "Inserted '#{term}' for #{ip} in DB with count #{count}"
         end
 
         redis.hdel(user_key, term.downcase.strip)
       end
     end
 
-    puts "🎉 Sync complete!"
+    puts "Sync complete"
   end
 end

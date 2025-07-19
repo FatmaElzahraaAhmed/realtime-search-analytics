@@ -1,4 +1,5 @@
 # config/initializers/redis.rb
 require 'redis'
 
-$redis = Redis.new(host: 'localhost', port: 6379)
+redis_url = ENV["REDIS_URL"] || "redis://localhost:6379"
+$redis = Redis.new(url: redis_url)
