@@ -14,7 +14,6 @@
 #
 default: &default
   adapter: postgresql
-  url: <%= ENV['DATABASE_URL'] %>
   encoding: unicode
   pool: 5
 
@@ -76,6 +75,4 @@ test:
 #
 production:
   <<: *default
-  database: realtime_search_analytics_production
-  username: realtime_search_analytics
-  password: <%= ENV["REALTIME_SEARCH_ANALYTICS_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
